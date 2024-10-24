@@ -1,14 +1,14 @@
 section .data
-global mensaje_num   ; Hace la etiqueta accesible desde otros módulos
+global mensaje_num   ;Mensajes correspondientes.
 mensaje_num db "Ingrese un numero: ", 0
 
-global mensaje_op    ; Hace la etiqueta accesible desde otros módulos
+global mensaje_op    ;Mensajes correspondientes.
 mensaje_op db "Ingrese una de estas operaciones: (+, -, *, /, %): ", 0
 
-global resultado      ; Hace la etiqueta accesible desde otros módulos
+global resultado      ;Mensajes correspondientes.
 resultado db "El resultado es: ", 0
 
-global error_msg      ; Hace la etiqueta accesible desde otros módulos
+global error_msg      ;Mensajes correspondientes.
 error_msg db "Ha ocurrido un error.", 0
 
 global nueva_linea
@@ -17,7 +17,7 @@ nueva_linea db " ", 0
 global msg_error_div
 msg_error_div db "No se puede dividir por cero: ", 0
 
-; Mensaje para math.asm
+; Mensaje para math.asm (Validar información)
 global mensaje_suma
 mensaje_suma db "Se ha seleccionado la suma.", 10, 0
 
