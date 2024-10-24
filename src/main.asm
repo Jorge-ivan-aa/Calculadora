@@ -9,10 +9,10 @@ section .bss
     operacion resb 1
 
 section .text
-    global _start
+    global main
     extern leer_numero, leer_operacion, mostrar_resultado, suma, resta, multiplicacion, division, modulo
 
-_start:
+main:
     ; Leer primer número
     call leer_numero
     mov [num1], eax
@@ -77,4 +77,4 @@ mostrar_res:
 salir:
     mov eax, 1          ; syscall para salir
     xor ebx, ebx        ; código de salida 0
-    int 0x80
+    int 0x8
