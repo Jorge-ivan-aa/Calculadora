@@ -43,7 +43,7 @@ limpiar_loop:
     ret                        ; Terminar limpieza del buffer
 
     ; Mostrar el resultado en consola
-    mostrar_resultado:
+mostrar_resultado:
     cmp rax, -1               ; Compara si rax contiene -1 (error)
     je error_division_msg      ; Si es -1, saltar a mostrar mensaje de error
 
