@@ -1,12 +1,12 @@
 section .data
     mensaje_op db "Ingrese la operación (+, -, *, /, %): ", 0
     mensaje_num db "Ingrese un número: ", 0
-    resultado db "Resultado: %d", 0
+    resultado db "Resultado: %d", 10, 0  ; Agrega salto de línea para el resultado
 
 section .bss
-    num1 resd 1
-    num2 resd 1
-    operacion resb 1
+    num1 resd 1  ; Reservar espacio para el primer número
+    num2 resd 1  ; Reservar espacio para el segundo número
+    operacion resb 1  ; Reservar espacio para el operador
 
 section .text
     global main
@@ -15,15 +15,15 @@ section .text
 main:
     ; Leer primer número
     call leer_numero
-    mov [num1], eax
+    mov [num1], eax  ; Guardar primer número en memoria
 
     ; Leer segundo número
     call leer_numero
-    mov [num2], eax
+    mov [num2], eax  ; Guardar segundo número en memoria
 
     ; Leer la operación
     call leer_operacion
-    mov [operacion], al
+    mov [operacion], al  ; Guardar la operación en memoria
 
     ; Realizar operación según el operador
     cmp byte [operacion], '+'
@@ -71,10 +71,10 @@ realizar_modulo:
     jmp mostrar_res
 
 mostrar_res:
-    call mostrar_resultado
+    call mostrar_resultado  ; Mostrar el resultado de la operación
     jmp salir
 
 salir:
-    mov eax, 1          ; syscall para salir
-    xor ebx, ebx        ; código de salida 0
-    int 0x8
+    mov rax, 60      ; syscall número para salir en 64 bits
+    xor rdi, rdi     ; código de salida 0
+    syscall          ; Llamada al sistema para salir
