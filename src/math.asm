@@ -1,13 +1,9 @@
 section .data
-    mensaje_suma db "El resultado de la suma es: %lld", 10, 0
-    mensaje_resta db "El resultado de la resta es: %lld", 10, 0
-    mensaje_multiplicacion db "El resultado de la multiplicación es: %lld", 10, 0
-    mensaje_division db "El resultado de la división es: %lld", 10, 0
-    mensaje_modulo db "El resultado del módulo es: %lld", 10, 0
+
 
 section .text
     global suma, resta, multiplicacion, division, modulo
-    extern printf
+    extern mensaje_suma, mensaje_resta, mensaje_multiplicacion, mensaje_division, mensaje_modulo, printf
 
 suma:
     mov rax, rdi         ; Cargar num1 en rax

@@ -1,6 +1,6 @@
 section .text
     global leer_numero, leer_operacion, mostrar_resultado
-    extern mensaje_num, mensaje_op, resultado, nueva_linea, msg_error_div, printf, scanf, getchar
+    extern mensaje_num, mensaje_op, mensaje_mensaje_inicio_ciclo, nueva_linea, msg_error_div, printf, scanf, getchar
 
     ; Leer número desde la entrada
 leer_numero:
@@ -46,11 +46,6 @@ limpiar_loop:
 mostrar_resultado:
     cmp rax, -1               ; Compara si rax contiene -1 (error)
     je error_division_msg      ; Si es -1, saltar a mostrar mensaje de error
-
-    mov rdi, resultado         ; Mostrar mensaje de resultado
-    mov rsi, rax               ; Pasar el resultado como argumento
-    xor eax, eax               ; Limpiar eax
-    call printf                ; Mostrar resultado
     jmp fin
 
 error_division_msg:

@@ -1,14 +1,20 @@
 section .bss
-    num1 resq 1  ; Reservar espacio para el primer número
-    num2 resq 1  ; Reservar espacio para el segundo número
-    operacion resb 1  ; Reservar espacio para el operador
+    num1 resq 1          ; Reservar espacio para el primer número
+    num2 resq 1          ; Reservar espacio para el segundo número
+    operacion resb 1     ; Reservar espacio para el operador
 
 section .text
     global main
-    extern leer_numero, leer_operacion, mostrar_resultado, suma, resta, multiplicacion, division, modulo, printf
+    extern mensaje_ciclo, mensaje_inicio_ciclo, leer_numero, leer_operacion, mostrar_resultado, suma, resta, multiplicacion, division, modulo, printf
     extern mensaje_operacion_invalida
 
 main:
+    ; Imprimir el mensaje de inicio de ciclo solo una vez
+    mov rdi, mensaje_inicio_ciclo 
+    xor eax, eax
+    call printf
+
+ciclo:
     ; Leer primer número
     call leer_numero
     mov [num1], rax  ; Guardar primer número en memoria
@@ -35,7 +41,7 @@ main:
 
     ; Si no se encuentra la operación, mostrar mensaje de operación inválida
     call mostrar_msj_op_invalida
-    jmp salir
+    jmp ciclo ; Se implementa un ciclo
 
 mostrar_msj_op_invalida:
     mov rdi, mensaje_operacion_invalida
@@ -75,7 +81,10 @@ realizar_modulo:
 
 mostrar_res:
     call mostrar_resultado
-    jmp salir
+    mov rdi, mensaje_ciclo 
+    xor eax, eax
+    call printf
+    jmp ciclo           ; Volver al ciclo de lectura y operación
 
 salir:
     mov rax, 60      ; syscall número para salir en 64 bits
