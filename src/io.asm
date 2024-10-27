@@ -1,23 +1,39 @@
 section .text
     global leer_numero, leer_operacion, mostrar_resultado
-    extern mensaje_num, mensaje_op, mensaje_mensaje_inicio_ciclo, nueva_linea, msg_error_div, printf, scanf, getchar
+    extern ciclo, mensaje_error_num, mensaje_num, mensaje_op, mensaje_mensaje_inicio_ciclo, nueva_linea, msg_error_div, printf, scanf, getchar
 
     ; Leer número desde la entrada
 leer_numero:
-    mov rdi, mensaje_num      ; Mostrar mensaje para ingresar número
-    xor eax, eax              ; Limpiar eax antes de llamar a printf
-    call printf               ; Llamar a printf para mostrar el mensaje
+    mov rdi, mensaje_num          ; Mostrar mensaje para ingresar número
+    xor eax, eax                  ; Limpiar eax antes de llamar a printf
+    call printf                   ; Llamar a printf para mostrar el mensaje
 
-    mov rdi, format_num        ; Dirección del formato para leer el número
-    mov rsi, numero            ; Dirección de la variable donde guardar el número
-    xor eax, eax               ; Limpiar eax antes de llamar a scanf
-    call scanf                 ; Llamar a scanf para leer el número
+intentar_entrada:
+    mov rdi, format_num           ; Dirección del formato para leer el número
+    mov rsi, numero               ; Dirección de la variable donde guardar el número
+    xor eax, eax                  ; Limpiar eax antes de llamar a scanf
+    call scanf                    ; Llamar a scanf para leer el número
+
+    ; Verificar si se leyó un número válido
+    cmp eax, 1                    ; Comparar el valor de retorno de scanf
+    jne numero_invalido           ; Si no se leyó un número válido, saltar a manejar el error
 
     ; Limpiar el buffer de entrada para evitar caracteres no deseados
     call limpiar_buffer
 
-    mov eax, [numero]          ; Cargar el número leído en eax (retorno)
-    ret                        ; Retornar el número
+    mov eax, [numero]             ; Cargar el número leído en eax (retorno)
+    ret                            ; Retornar el número
+
+numero_invalido:
+    ; Limpiar el buffer antes de volver a solicitar entrada
+    call limpiar_buffer
+
+    ; Mostrar mensaje de error
+    mov rdi, mensaje_error_num     ; Mensaje de error para número inválido
+    xor eax, eax
+    call printf                    ; Llamar a printf para mostrar el mensaje
+
+    jmp leer_numero         ; Volver a intentar la entrada
 
     ; Leer la operación (+, -, *, /, %)
 leer_operacion:
@@ -43,21 +59,6 @@ limpiar_loop:
     ret                        ; Terminar limpieza del buffer
 
     ; Mostrar el resultado en consola
-mostrar_resultado:
-    cmp rax, -1               ; Compara si rax contiene -1 (error)
-    je error_division_msg      ; Si es -1, saltar a mostrar mensaje de error
-    jmp fin
-
-error_division_msg:
-    mov rdi, msg_error_div     ; Mensaje de error para división
-    xor eax, eax
-    call printf
-
-fin:
-    mov rdi, nueva_linea       ; Añadir una nueva línea
-    xor eax, eax
-    call printf
-    ret                      ; Retornar
 
 section .data
     format_num db "%d", 0      ; Formato para leer un número entero

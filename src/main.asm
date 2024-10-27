@@ -4,8 +4,8 @@ section .bss
     operacion resb 1     ; Reservar espacio para el operador
 
 section .text
-    global main
-    extern mensaje_ciclo, mensaje_inicio_ciclo, leer_numero, leer_operacion, mostrar_resultado, suma, resta, multiplicacion, division, modulo, printf
+    global main, salir, ciclo
+    extern mensaje_ciclo, mensaje_inicio_ciclo, leer_numero, leer_operacion, suma, resta, multiplicacion, division, modulo, printf
     extern mensaje_operacion_invalida
 
 main:
@@ -27,6 +27,9 @@ ciclo:
     call leer_operacion
     mov [operacion], al  ; Guardar la operación en memoria
 
+
+    cmp byte [operacion], 'q'
+    je salir
     ; Realizar operación según el operador
     cmp byte [operacion], '+'
     je realizar_suma
@@ -53,34 +56,33 @@ realizar_suma:
     mov rdi, [num1]     ; Cargar num1 en rdi
     mov rsi, [num2]     ; Cargar num2 en rsi
     call suma           ; Llamar a suma
-    jmp mostrar_res
+    jmp iterar
 
 realizar_resta:
     mov rdi, [num1]     ; Cargar num1 en rdi
     mov rsi, [num2]     ; Cargar num2 en rsi
     call resta          ; Llamar a resta
-    jmp mostrar_res
+    jmp iterar
 
 realizar_multiplicacion:
     mov rdi, [num1]     ; Cargar num1 en rdi
     mov rsi, [num2]     ; Cargar num2 en rsi
     call multiplicacion  ; Llamar a multiplicación
-    jmp mostrar_res
+    jmp iterar
 
 realizar_division:
     mov rdi, [num1]     ; Cargar num1 en rdi
     mov rsi, [num2]     ; Cargar num2 en rsi
     call division        ; Llamar a división
-    jmp mostrar_res
+    jmp iterar
 
 realizar_modulo:
     mov rdi, [num1]     ; Cargar num1 en rdi
     mov rsi, [num2]     ; Cargar num2 en rsi
     call modulo          ; Llamar a módulo
-    jmp mostrar_res
+    jmp iterar
 
-mostrar_res:
-    call mostrar_resultado
+iterar:
     mov rdi, mensaje_ciclo 
     xor eax, eax
     call printf
