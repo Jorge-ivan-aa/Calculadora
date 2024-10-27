@@ -3,7 +3,7 @@ section .data
 
 section .text
     global suma, resta, multiplicacion, division, modulo
-    extern mensaje_suma, mensaje_resta, mensaje_multiplicacion, mensaje_division, mensaje_modulo, printf
+    extern msg_error_div, mensaje_suma, mensaje_resta, mensaje_multiplicacion, mensaje_division, mensaje_modulo, printf
 
 suma:
     mov rax, rdi         ; Cargar num1 en rax
@@ -36,16 +36,26 @@ multiplicacion:
     ret
 
 division:
-    mov rax, rdi         ; Cargar num1 en rax
-    cmp rsi, 0
-    je error_division     ; Manejo de error si el divisor es cero
-    xor rdx, rdx         ; Limpiar rdx para la división
-    idiv rsi             ; Realizar división, resultado en rax
-    mov rdi, mensaje_division; Cargar la dirección del mensaje
-    xor rsi, rsi         ; Limpiar rsi para printf
-    mov rsi, rax         ; Mover el resultado a rsi
-    xor rax, rax         ; Limpiar rax para printf
-    call printf           ; Llamar a printf
+    mov rax, rdi                 ; Cargar num1 en rax
+    cmp rsi, 0                    ; Comparar el divisor (rsi) con 0
+    je error_division             ; Si el divisor es cero, saltar a manejar el error
+
+    xor rdx, rdx                  ; Limpiar rdx para la división
+    idiv rsi                      ; Realizar división, resultado en rax
+
+    ; Mostrar resultado de la división
+    mov rdi, mensaje_division     ; Cargar la dirección del mensaje
+    xor rsi, rsi                  ; Limpiar rsi para printf
+    mov rsi, rax                  ; Mover el resultado a rsi
+    xor rax, rax                  ; Limpiar rax para printf
+    call printf                   ; Llamar a printf
+    ret
+
+error_division:
+    ; Mensaje de error para división por cero
+    mov rdi, msg_error_div        ; Cargar la dirección del mensaje de error
+    xor rax, rax                  ; Limpiar rax para printf
+    call printf                   ; Llamar a printf
     ret
 
 modulo:
@@ -59,12 +69,4 @@ modulo:
     mov rsi, rdx         ; Guardar el resto (resultado) en rsi
     xor rax, rax         ; Limpiar rax para printf
     call printf           ; Llamar a printf
-    ret
-
-error_division:
-    mov rdi, mensaje_division; Aquí puedes manejar el error de división por cero
-    xor rsi, rsi         ; Limpiar rsi para printf
-    mov rsi, -1          ; Usar -1 como código de error
-    xor rax, rax         ; Limpiar rax para printf
-    call printf
     ret
